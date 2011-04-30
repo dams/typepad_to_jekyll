@@ -15,7 +15,7 @@ from typepad.
 =head2 What it does
 
 C<typepad_to_jekyll> imports typepad blog entries (not the comments) from
-typepad into yoru jekyll directory, under the C<_posts> directory.
+typepad into your jekyll directory, under the C<_posts> directory.
 
 =head2 Requirements
 
