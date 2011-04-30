@@ -1,0 +1,96 @@
+#!/usr/bin/env perl
+use strict;
+use warnings;
+
+my ($typepad_file, $jekyll_directory) = @ARGV;
+
+defined $typepad_file && -r $typepad_file && defined $jekyll_directory && -d
+$jekyll_directory
+  or usage();
+
+my $directory = $jekyll_directory . '/_posts';
+-d $directory
+  or ( mkdir $directory
+       or usage ("couldn't create '$directory'") );
+
+open my $input, '<', $typepad_file
+  or usage ("couldn't open typepad export file '$typepad_file'");
+
+my $body = '';
+my $mode = 'post_header';
+my ($author, $title, $status, $date);
+my @categories;
+while (<$input>) {
+    chomp;
+    if ($mode eq 'post_header') {
+        /^-----$/
+          and $mode = '', next;
+        /^AUTHOR: (.+)/
+          and $author=$1;
+        /^TITLE: (.+)/
+          and $title=$1;
+        /^STATUS: (.+)/
+          and $status=$1;
+        /^CATEGORY: (.+)/
+          and push @categories, $1;
+        /^DATE: (.+)/
+          and $date = $1;
+    } elsif ($mode eq 'body') {
+        /^-----$/
+          and $mode = '', next;
+        $body .= $_ . "\n";
+    } elsif ($mode eq 'extended_body') {
+        /^-----$/
+          and $mode = '', next;
+        $body .= $_ . "\n";
+    } else {
+        /^BODY:/
+          and $mode = 'body';
+        /^EXTENDED BODY:/
+          and $mode = 'extended_body';
+        if (/^--------$/) {
+            my $clean_title = lc($title);
+            $clean_title =~ s/[^a-z0-9]/-/g;
+            $clean_title =~ s/-+/-/g;
+            my ($m, $d, $y) = $date =~ m|^(\d{1,2})/(\d{1,2})/(\d{4})|
+              or warn "failed to parse date '$date' (post title : '$title')", next;
+            my $file_name = $directory . '/' . "$y-$m-$d-" . $clean_title . '.html';
+            open my $output, '>', $file_name
+              or warn "failed to open file '$file_name' post title : '$title')", next;
+            my $categories = '';
+            @categories > 0 and $categories = "category:\n";
+            @categories > 1 and $categories = "categories:\n";
+            $categories .= join('', map { "  - $_\n" } @categories);
+            my $published = ( $status eq 'Publish' ? 1 : 0);
+            my $header = 
+              "---\n"
+            . "layout: post\n"
+            . "title: $title\n"
+            . "published: $published\n"
+            . $categories
+            . "---\n";
+            print $output $header;
+            print $output $body;
+            $body = '';
+            $author = '';
+            $title = '';
+            $status = '';
+            @categories = ();
+            $date = '';            
+            $mode = 'post_header';
+         }
+    }
+
+}
+
+sub usage {
+    my ($message) = @_;
+    $message ||= 'wrong arguments';
+    print "
+error : $message.
+
+Usage : $0 <typepad_export_file.txt> <jekyll_directory>
+
+";
+    exit -1;
+}
