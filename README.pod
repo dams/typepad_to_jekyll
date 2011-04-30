@@ -53,7 +53,7 @@ Download the file and rename it to, say, C<typepad_export.txt>.
 
 run typepad_to_jekyll like this :
 
-perl ./typepad_to_jekyll path/to/typepad_export.txt  path/to/jekyll/directory
+  perl ./typepad_to_jekyll path/to/typepad_export.txt  path/to/jekyll/directory
 
 =item *
 
