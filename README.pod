@@ -1,0 +1,56 @@
+=head1 typepad_to_jekyll
+
+=head2 What is this stuff ?
+
+I was in the process of migrating my blog from L<typepad.com> to
+L<http://jekyllrb.com/>.
+
+Jekyll is missing an import script to import blog entries from Typepad, and I
+couldn't find anything related on the Internet. Well, I searched for less than
+5 minutes, then I thought it'd be quicker to do itmyself. So here we are.
+
+C<typepad_to_jekyll> is a script to import blog entries previously exported
+from typepad.
+
+=head2 What it does
+
+C<typepad_to_jekyll> imports typepad blog entries (not the comments) from
+typepad into yoru jekyll directory, under the C<_posts> directory.
+
+=head2 Requirements
+
+You need C<perl>, and a platform where it runs. So that's pretty generic.
+
+You also need a jekyll directory. But if you don't have that, I don't know why
+you are bothering anyway...
+
+=head2 Usage
+
+=head3 Export your blog entries from typepad
+
+=over
+
+=item *
+
+Log on typepad.com, go to your typepad blog admin page, then in the B<Settings> tab
+
+=item *
+
+Click on B<Import/Export> pane (bottom left), and export your blog. It should
+produce a C<txt> file, called something like C<Unnamed_Comet_Asset.txt>.
+
+=item *
+
+Download the file and rename it to, say, C<typepad_export.txt>.
+
+=head3 Download and install typepa_to_jekyll
+
+=item *
+
+run typepad_to_jekyll like this :
+
+perl ./typepad_to_jekyll path/to/typepad_export.txt  path/to/jekyll/directory
+
+=item *
+
+that's it !
