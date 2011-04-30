@@ -43,7 +43,11 @@ produce a C<txt> file, called something like C<Unnamed_Comet_Asset.txt>.
 
 Download the file and rename it to, say, C<typepad_export.txt>.
 
+=back
+
 =head3 Download and install typepa_to_jekyll
+
+=over
 
 =item *
 
@@ -54,3 +58,5 @@ perl ./typepad_to_jekyll path/to/typepad_export.txt  path/to/jekyll/directory
 =item *
 
 that's it !
+
+=back
