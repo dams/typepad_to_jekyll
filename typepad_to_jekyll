@@ -1,6 +1,8 @@
 #!/usr/bin/env perl
 use strict;
 use warnings;
+use utf8;
+use open ':encoding(utf8)';
 
 my ($typepad_file, $jekyll_directory) = @ARGV;
 
@@ -15,6 +17,7 @@ my $directory = $jekyll_directory . '/_posts';
 
 open my $input, '<', $typepad_file
   or usage ("couldn't open typepad export file '$typepad_file'");
+binmode $input, ':encoding(UTF-8)';
 
 my $body = '';
 my $mode = 'post_header';
@@ -52,11 +55,13 @@ while (<$input>) {
             my $clean_title = lc($title);
             $clean_title =~ s/[^a-z0-9]/-/g;
             $clean_title =~ s/-+/-/g;
+            $clean_title =~ s/^-+//g;
             my ($m, $d, $y) = $date =~ m|^(\d{1,2})/(\d{1,2})/(\d{4})|
               or warn "failed to parse date '$date' (post title : '$title')", next;
             my $file_name = $directory . '/' . "$y-$m-$d-" . $clean_title . '.html';
             open my $output, '>', $file_name
               or warn "failed to open file '$file_name' post title : '$title')", next;
+            binmode $output, ':encoding(UTF-8)';
             my $categories = '';
             @categories > 0 and $categories = "category:\n";
             @categories > 1 and $categories = "categories:\n";
