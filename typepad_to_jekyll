@@ -67,6 +67,9 @@ while (<$input>) {
             @categories > 1 and $categories = "categories:\n";
             $categories .= join('', map { "  - $_\n" } @categories);
             my $published = ( $status eq 'Publish' ? 'true' : 'false');
+            # Double-quote the title to avoid YAML parsing errors
+            $title =~ s/\"/\\\"/g;
+            $title = '"' . $title . '"';
             my $header = 
               "---\n"
             . "layout: post\n"
