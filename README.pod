@@ -45,7 +45,7 @@ Download the file and rename it to, say, C<typepad_export.txt>.
 
 =back
 
-=head3 Download and install typepa_to_jekyll
+=head3 Download and run typepad_to_jekyll
 
 =over
 
